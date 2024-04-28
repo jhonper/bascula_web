@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Báscula Simulada</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- JQuery para el autocompletado -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+        .ui-autocomplete {
+          max-height: 200px;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        * html .ui-autocomplete {
+          height: 200px;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    {% include './public/navbar.html' %}    
+
+<!-- AUTOCOMPLETE PRODUCTO AGREGANDO EL ID OCULTO  -->
+<script>
+    let dataProductos = JSON.parse('{{ dataProductos | tojson }}');
+    $( function() {
+      let nombres = {};
+      for (let i = 0; i < dataProductos.length; i++) {
+          nombres[dataProductos[i]['Codigo']] = {nombre: dataProductos[i]['Nombre'], id: dataProductos[i]['IDproducto']};
+      }
+      let nombresArray = $.map(nombres, function(value, key) {
+        return key + ' - ' + value.nombre;
+      });
+      $( "#codigoProducto" ).autocomplete({
+        source: nombresArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          let split = selected.split(' - ');
+          $('#codigoProducto').val(split[0]);
+          $('#nombreProducto').val(nombres[split[0]].nombre);
+          $('#idProducto').val(nombres[split[0]].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#codigoProducto').on('input', function() {
+        if ($(this).val() === '') {
+          $('#nombreProducto').val('');
+          $('#idProducto').val('');
+        }
+      });
+    } );
+</script>
+
+<!-- AUTOCOMPLETE PROVEEDOR -->
+<script>
+    let dataProveedor = JSON.parse('{{ dataProveedor | tojson }}');
+    $( function() {
+      let nombres = {};
+      for (let i = 0; i < dataProveedor.length; i++) {
+          nombres[dataProveedor[i]['documento']] = {nombre: dataProveedor[i]['nombre'], id: dataProveedor[i]['id']};
+      }
+      let nombresArray = $.map(nombres, function(value, key) {
+        return key + ' - ' + value.nombre;
+      });
+      $( "#txNit" ).autocomplete({
+        source: nombresArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          let split = selected.split(' - ');
+          $('#txNit').val(split[0]);
+          $('#nombreProveedor').val(nombres[split[0]].nombre);
+          $('#idProveedor').val(nombres[split[0]].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#txNit').on('input', function() {
+        if ($(this).val() === '') {
+          $('#nombreProveedor').val('');
+          $('#idProveedor').val('');
+        }
+      });
+    } );
+</script>
+
+
+<!-- AUTOCOMPLETE CONDUCTORES -->
+<script>
+    let dataConductores = JSON.parse('{{ dataConductores | tojson }}');
+    $( function() {
+      let nombres = {};
+      for (let i = 0; i < dataConductores.length; i++) {
+          nombres[dataConductores[i]['documento']] = {nombre: dataConductores[i]['nombre'], id: dataConductores[i]['id']};
+      }
+      let nombresArray = $.map(nombres, function(value, key) {
+        return key + ' - ' + value.nombre;
+      });
+      $( "#conductor" ).autocomplete({
+        source: nombresArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          let split = selected.split(' - ');
+          $('#conductor').val(split[1]);
+          $('#idConductor').val(nombres[split[0]].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#conductor').on('input', function() {
+        if ($(this).val() === '') {
+          $('#conductor').val('');
+          $('#idConductor').val('');
+        }
+      });
+    } );
+</script>
+
+<!-- AUTOCOMPLETE dataVehiculo -->
+<script>
+    let dataVehiculo = JSON.parse('{{ dataVehiculo | tojson }}');
+    $( function() {
+      let placas = {};
+      for (let i = 0; i < dataVehiculo.length; i++) {
+          placas[dataVehiculo[i]['placa']] = {nombre: dataVehiculo[i]['nombre'], id: dataVehiculo[i]['id']};
+      }
+      let placasArray = $.map(placas, function(value, key) {
+        return key;
+      });
+      $( "#placa" ).autocomplete({
+        source: placasArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          $('#placa').val(selected);
+          $('#idvehiculo').val(placas[selected].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#placa').on('input', function() {
+        if ($(this).val() === '') {
+          $('#placa').val('');
+          $('#idvehiculo').val('');
+        }
+      });
+    } );
+</script>
+
+
+
+<!-- AUTOCOMPLETE ORIGENES -->
+<script>
+    let dataOrigenes = JSON.parse('{{ dataOrigenes | tojson }}');
+    $( function() {
+      let origenes = {};
+      for (let i = 0; i < dataOrigenes.length; i++) {
+        //   origenes[dataOrigenes[i]['origen']] = {codigo: dataOrigenes[i]['codigo'], id: dataOrigenes[i]['idorigen']};
+        origenes[dataOrigenes[i]['codigo']] = {origen: dataOrigenes[i]['origen'], id: dataOrigenes[i]['idorigen']};
+      }
+      let origenesArray = $.map(origenes, function(value, key) {
+        return key + ' - ' + value.origen;
+      });
+      $( "#codorigen" ).autocomplete({
+        source: origenesArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          let split = selected.split(' - ');
+          $('#codorigen').val(split[0]);
+          $('#origen').val(origenes[split[0]].origen);
+          $('#idorigen').val(origenes[split[0]].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#codorigen').on('input', function() {
+        if ($(this).val() === '') {
+          $('#origen').val('');
+          $('#idorigen').val('');
+        }
+      });
+    } );
+</script>
+
+<!-- AUTOCOMPLETE ORIGENES -->
+<script>
+    let dataDestinos = JSON.parse('{{ dataDestinos | tojson }}');
+    $( function() {
+      let destinos = {};
+      for (let i = 0; i < dataDestinos.length; i++) {
+        destinos[dataDestinos[i]['codigo']] = {destino: dataDestinos[i]['destino'], id: dataDestinos[i]['iddestino']};
+      }
+      let destinosArray = $.map(destinos, function(value, key) {
+        return key + ' - ' + value.destino;
+      });
+      $( "#coddestino" ).autocomplete({
+        source: destinosArray,
+        select: function(event, ui) {
+          let selected = ui.item.value;
+          let split = selected.split(' - ');
+          $('#codestino').val(split[0]);
+          $('#destino').val(destinos[split[0]].destino);
+          $('#iddestino').val(destinos[split[0]].id);
+          return false;
+        }
+      });
+  
+      // Agregar controlador de eventos 'input'
+      $('#coddestino').on('input', function() {
+        if ($(this).val() === '') {
+          $('#destino').val('');
+          $('#iddestino').val('');
+        }
+      });
+    } );
+</script>
+
+
+
+    <div class="container">
+        <!-- CAMPOS OCULTO -->
+
+        <style>
+            .card-shadow { box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)!important; }
+        </style>        
+
+        {% if dataMovimiento %}
+        <!-- <div class="card shadow"> -->
+            <!-- <div class="card-body"> -->
+        <div class="card card-shadow">           
+                <form action="/updateoperaciones" method="POST" class="mt-5">
+                    <input type="hidden" id="idProveedor" name="idProveedor" value="" /> 
+                    <input type="hidden" id="idConductor" name="idConductor" />
+                    <input type="hidden" id="idvehiculo" name="idvehiculo" />
+                    <input type="hidden" id="idProducto" name="idProducto">
+                    <input type="hidden" id="idorigen" name="idorigen" /> 
+                    <input type="hidden" id="iddestino" name="iddestino" /> 
+
+                    <div class="container pb-3">
+                        <div class="row col-md-4 offset-md-1">
+                          <div class="col-md-12 offset-md-2">
+                          <label for="tipomovimiento">Tipo de movimiento</label>
+                          <!-- <select class="form-select form-control" id="tipomovimiento" name="tipomovimiento" style="font-size: 13px;">
+                              <option value="">Seleccione un movimiento</option>
+                              <option value="E">Entrada</option>
+                              <option value="S">Salida</option>
+                          </select> -->
+                            {% if dataMovimiento.tipomovimiento == 'E' %}
+                                <input type="text" id="tipomovimiento" value="ENTRADA" class="form-select form-control" style="font-size: 13px;" readonly>
+                            {% elif dataMovimiento.tipomovimiento == 'S' %}
+                                <input type="text" id="tipomovimiento" value="SALIDA" class="form-select form-control" style="font-size: 13px;" readonly>
+                            {% endif %}
+                          
+                            
+                        </div>
+                      </div>
+                      </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        
+                        
+                        <div class="form-group col-md-4">
+                            <label for="txNit">Nit</label>
+                            <input type="text" class="form-control" id="txNit" name="nit" value="{{dataMovimiento.documentoproveedor}}"  readonly style="font-size: 12px;" />
+                        </div>
+                        
+                        <div class="form-group col-md-4">
+                            <label for="nombreProveedor">Nombre cliente</label>
+                            <input type="text" class="form-control" id="nombreProveedor" name="nombreproveedor" value="{{dataMovimiento.nombreproveedor}}" style="font-size: 12px;" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        <div class="form-group col-md-4">
+                            <label for="conductor">Conductor</label>
+                            <input type="text" class="form-control" id="conductor" name="conductor" value="{{dataMovimiento.nombreconductor}}" readonly style="font-size: 12px;" />
+                        </div>
+                        
+                        <div class="form-group col-md-4">
+                            <label for="placa">Placa</label>
+                            <input type="text" class="form-control" id="placa" name="placa" value="{{dataMovimiento.placa}}" readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        
+
+                        <div class="form-group col-md-4">
+                            <label for="codigoProducto">Producto</label>
+                            <input type="text" class="form-control" id="codigoProducto" name="codigoproducto" value="{{dataMovimiento.codigoproducto}}" readonly style="font-size: 12px;" />
+                        </div>
+                        
+                        <div class="form-group col-md-4">
+                            <label for="nombreProducto">Nombre producto</label>
+                            <input type="text" class="form-control" id="nombreProducto" name="nombreproducto" value="{{dataMovimiento.nombreproducto}}" readonly style="font-size: 12px;" readonly/>
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        <div class="form-group col-md-4">
+                            <label for="codorigen">Cod Origen</label>
+                            <input type="text" class="form-control" id="codorigen" name="codorigen" value="{{dataMovimiento.codigoorigen}}" readonly style="font-size: 12px;" />
+                        </div>
+                        
+                        <div class="form-group col-md-4">
+                            <label for="origen">Origen</label>
+                            <input type="text" class="form-control" id="origen" name="origen" value="{{dataMovimiento.origen}}" readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        <div class="form-group col-md-4">
+                            <label for="coddestino">Cod Destino</label>
+                            <input type="text" class="form-control" id="coddestino" name="coddestino" value="{{dataMovimiento.codigodestino}}" readonly style="font-size: 12px;" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="destino">Destino</label>
+                            <input type="text" class="form-control" id="destino" name="destino" value="{{dataMovimiento.destino}}" readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+                        <div class="form-group col-md-8">
+                            <label for="observaciones">Observaciones</label>
+                            <textarea class="form-control" id="observaciones" name="observaciones" aria-label="With textarea" style="resize: none;">{{dataMovimiento.observaciones}}</textarea>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="form-row justify-content-md-center">
+                        <div class="form-group col-md-2">
+                            <label for="fechaEntrada">Fecha entrada</label>
+                            <input type="text" class="form-control" id="fechaEntrada" value="{{dataMovimiento.fechaentrada}}" name="fechaentrada" style="font-size: 12px;" readonly/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="horaEntrada">Hora entrada</label>
+                            <input type="text" class="form-control" id="horaEntrada" value="{{dataMovimiento.horaentrada}}" name="horaentrada" style="font-size: 12px;" readonly/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="fechaSalida">Fecha salida</label>
+                            <input type="text" class="form-control" id="fechaSalida" name="fechasalida" style="font-size: 12px;" readonly/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="horaSalida">Hora Salida</label>
+                            <input type="text" class="form-control" id="horaSalida" name="horasalida" style="font-size: 12px;" readonly/>
+                        </div>
+                    </div>
+
+                    <!-- toma de pesos -->
+                    <div class="form-row justify-content-md-center">
+                        <!-- <div class="form-group col-md-2">  -->
+
+                        <div class="form-group col-md-2">
+                            <label for="inputZip">Peso entrada</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" required id="numeroTransferido" name="pesoentrada" value="{{dataMovimiento.pesoentrada}}" class="form-control" aria-label="Peso de entrada" aria-describedby="button-addon2" style="font-size: 38px;" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="btnPesoEntrada" style="height: 100%;" onclick="capturarPesoEntrada()" disabled="disabled">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="form-group col-md-2">
+                            <label for="inputZip">Peso salida</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" id="pesoSalida" name="pesosalida" class="form-control" aria-label="Peso de entrada" aria-describedby="button-addon2" style="font-size: 38px;" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="btnPesoSalida" style="height: 100%;" onclick="capturarPesoSalida()" disabled="disabled"> <!-- onclick="deshabilitarBoton()" -->
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="form-group col-md-2">
+                            <label for="inputZip">Peso neto</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" id="txtPesoNeto" name="pesoneto" class="form-control" aria-label="Peso neto" aria-describedby="button-addon2" style="font-size: 38px;" readonly>
+                                <!-- <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="transferirNumero" style="height: 100%;" disabled="disabled">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div> -->
+                            </div>
+                        </div> 
+                        
+                    </div>
+                    
+                
+           
+        <!-- Botones de acciones  -->
+        <div class="form-row justify-content-md-center"> <!-- para centrar los inputs -->
+            <div class="form-group col-md-4">
+                <!-- <button class="btn btn-primary" id="btnNuevo" onclick="nuevoRegistro()">Nuevo</button> -->
+                <!-- <button class="btn btn-primary" id="btnNuevo" disabled="disabled" >Nuevo</button> -->
+                <button class="btn btn-primary" id="btnEditar" onclick="actualizarRegistro()" >Editar</button>
+                <!-- <button class="btn btn-success" type="submit" id="btnGuardar">Guardar</button> -->
+                <button type="submit" id="btnGuardar" name="idmovimiento" value="{{ dataMovimiento.idmovimiento }}" class="btn btn-success">Guardar</button>
+                <!-- <button class="btn btn-danger" id="btnCancelar" onclick="limpiarContenido()">Cancelar</button> -->
+                <button class="btn btn-danger" id="btnCancelar" onclick="">Cancelar</button> <!-- puede ser un enlace a entransito -->
+            </div>
+        </div>
+        
+    </form>
+
+    {% endif %}
+
+    
+    <!-- <input type="text" id="idproveedor" name="idproveedor" style="background-color: aqua;" />  -->
+
+    <script>
+        function limpiarContenido() {
+            document.getElementById("txNit").value = "";
+            document.getElementById("nombreProveedor").value = "";
+            document.getElementById("conductor").value = "";
+            document.getElementById("placa").value = "";
+            document.getElementById("codigoProducto").value = "";
+            document.getElementById("nombreProducto").value = "";
+            document.getElementById("origen").value = "";
+            document.getElementById("destino").value = "";
+            document.getElementById("observaciones").value = "";
+            document.getElementById("fechaEntrada").value = "";
+            document.getElementById("horaEntrada").value = "";
+            document.getElementById("fechaSalida").value = "";
+            document.getElementById("horaSalida").value = "";
+            document.getElementById("numeroTransferido").value = "";
+            document.getElementById("pesoSalida").value = "";
+            document.getElementById("txtPesoNeto").value = "";
+
+        }
+    </script>
+
+
+        <!-- <button onclick="detenerSimulacion()" class="btn btn-primary">Capturar pesos</button>    
+        <button onclick="iniciarSimulacion()" class="btn btn-primary">Capturar salida </button>    -->
+        <!-- <button onclick="transferirNumero()" id="transferirNumero" class="btn btn-primary">Transferir</button>   -->
+        <!-- Botones de acciones  -->
+    <!-- </div> class="card-body" -->
+<!-- </div> class="card shadow">         -->
+</div>    
+
+    <div class="form-row"> <!-- pesos -->
+       <div class="form-group col-md-2">
+            <label for="numeroAleatorio" hidden>origen</label>
+        
+            <input type="text" id="numeroAleatorio" hidden readonly>
+            <button id="transferirNumero" hidden>Transferir Número</button>
+            <input type="text" id="numeroTransferido" hidden readonly>
+        </div> 
+    </div>  
+
+    <script>
+        // Función para transferir el número aleatorio al segundo input
+        function transferirNumero() {
+            var numeroAleatorio = document.getElementById('numeroAleatorio').value;
+            document.getElementById('numeroTransferido').value = numeroAleatorio;
+        }
+
+        // Ejecuta la función transferirNumero cuando se haga clic en el botón
+        //document.getElementById('transferirNumero').addEventListener('click', transferirNumero);
+    </script>
+
+<script>
+    function transferirSalida() {
+        let pesoSalida = document.getElementById('numeroAleatorio').value;
+        document.getElementById('numeroTransferido').value = pesoSalida;
+    }
+
+    // Ejecuta la función transferirNumero cuando se haga clic en el botón
+    //document.getElementById('btnPesoSalida').addEventListener('click', transferirSalida);
+</script>
+
+<script>
+    function transferirEntrada() {
+        let pesoSalida = document.getElementById('numeroAleatorio').value;
+        document.getElementById('numeroTransferido').value = pesoSalida;
+    }
+
+    // Ejecuta la función transferirNumero cuando se haga clic en el botón
+    //document.getElementById('btnEntrada').addEventListener('click', transferirEntrada);
+</script>
+
+<script>
+    function deshabilitarBoton() {
+        let btnPesoSalida = document.getElementById("btnPesoSalida");
+        btnPesoSalida.classList.remove("btn-primary");
+        btnPesoSalida.classList.add("btn-secondary");
+        btnPesoSalida.disabled = true;
+        botonPresionado = true;
+    }
+
+    function capturarPesoEntrada() {
+        let btnPesoEntrada = document.getElementById("btnPesoEntrada");
+
+        btnPesoEntrada.classList.remove("btn-primary");
+        btnPesoEntrada.classList.add("btn-secondary");
+        btnPesoEntrada.disabled = true;
+        botonPresionado = true;
+        document.getElementById("btnEditar").disabled = false;
+    }
+
+    //document.getElementById('btnPesoSalida').addEventListener('click', deshabilitarBoton); // desencadena 
+
+    function capturarPesoSalida() {
+        let btnPesoSalida = document.getElementById("btnPesoSalida");
+
+        btnPesoSalida.classList.remove("btn-primary");
+        btnPesoSalida.classList.add("btn-secondary");
+        btnPesoSalida.disabled = true;
+        editarRegistro = true;
+        botonPresionado2 = true;
+
+        let txtPesoEntrada = document.getElementById("numeroTransferido").value;
+        let txtPesoSalida = document.getElementById("pesoSalida").value;
+        console.log(`txtPesoEntrada: ${txtPesoEntrada}`);
+        console.log(`txtPesoSalida: ${txtPesoSalida}`);
+        let pesoNeto = txtPesoEntrada + txtPesoSalida;
+        console.log(`pesoNeto: ${pesoNeto}`);
+        
+        // calculo dependiendo del tipo de movimiento
+        // if(document.getElementById("tipomovimiento").value == 'E'){
+        //     document.getElementById("txtPesoNeto").value = parseInt(txtPesoEntrada) - parseInt(txtPesoSalida);
+        // }else if(document.getElementById("tipomovimiento").value == 'S')        {
+        //     document.getElementById("txtPesoNeto").value = parseInt(txtPesoSalida) - parseInt(txtPesoEntrada); 
+        // }
+
+        "{% if dataMovimiento.tipomovimiento == 'E' %}"
+            document.getElementById("txtPesoNeto").value = parseInt(txtPesoEntrada) - parseInt(txtPesoSalida);
+        "{% elif dataMovimiento.tipomovimiento == 'S' %}"
+            document.getElementById("txtPesoNeto").value = parseInt(txtPesoSalida) - parseInt(txtPesoEntrada); 
+        "{% endif %}"
+        
+            
+    }
+    var btnPesoSalidaPresionado = false;
+
+    //document.getElementById('btnPesoSalida').addEventListener('click', capturarPesoSalida);
+    </script>
+
+    <script>
+        function nuevoRegistro() {
+            esNuevo = true;
+            document.getElementById("btnPesoEntrada").disabled = false;
+            document.getElementById("btnNuevo").disabled = true;
+        }
+
+        function actualizarRegistro() {
+            editarRegistro = true;
+            document.getElementById("btnPesoSalida").disabled = false;
+            document.getElementById("btnEditar").disabled = true;
+
+
+            let username = "{{ session['username'] }}";
+            let editarpesos = "{{ session['editarpesos'] }}"; 
+            let productospermitidos = "{{ session['productospermitidos'] }}";  
+
+            let codiProd = "{{dataMovimiento.codigoproducto}}";
+            productospermitidos = productospermitidos.split(",");
+            console.log(`codigo producto: ${codiProd}`);
+            console.log(`tipo codigo producto: ${typeof(codiProd)}`);
+            console.log(`len producto: ${codiProd.length}`);
+
+            console.log(`productos permitido: ${productospermitidos}`);
+            console.log(`productos permitido length: ${productospermitidos.length}`);
+
+            //console.log(`arraycodiProd: ${arraycodiProd}`);     
+            //console.log(`tipo arraycodiProd: ${typeof(arraycodiProd)}`);             
+
+            
+            if( editarpesos === "1" ) {
+              document.getElementById("numeroTransferido").removeAttribute("readonly");
+
+              const txtPesoSalida = document.getElementById("pesoSalida");
+              txtPesoSalida.removeAttribute("readonly");
+              console.log("puede editar pesos");
+            }
+            
+            if(productospermitidos.length > 0) {
+                if(productospermitidos.includes(codiProd)) {
+                    console.log("habilitar");
+                    document.getElementById("txNit").disabled = false;    
+                    //document.getElementById("conductor").disabled = true;   
+                    
+                    document.getElementById("txNit").removeAttribute("readonly");
+                    document.getElementById("conductor").removeAttribute("readonly");
+                    document.getElementById("conductor").style.color = "black";
+                    document.getElementById("codigoProducto").removeAttribute("readonly");
+                    document.getElementById("codorigen").removeAttribute("readonly");
+                    document.getElementById("coddestino").removeAttribute("readonly");
+                    document.getElementById("placa").removeAttribute("readonly");
+                    //const codigoProducto = document.getElementById("codigoProducto");
+                    //codigoProducto.removeAttribute("readonly");
+
+                    //document.getElementById("codigoProducto").removeAttribute("readonly");
+                    //document.getElementById("codorigen").removeAttribute("readonly");    
+                    document.getElementById("codorigen").disabled = false;    
+                    document.getElementById("coddestino").disabled = false;    
+                    
+                }
+            }
+        }
+
+        document.getElementById('btnNuevo').addEventListener('click', nuevoRegistro);
+        document.getElementById('btnPesoSalida').addEventListener('click', actualizarRegistro);
+        //document.getElementById('btnEditar').addEventListener('click', actualizarRegistro);
+    </script>
+    
+
+        <script>
+            var esNuevo = false;
+            var editarRegistro = false;
+            $(document).ready(function(){
+                var socket = io.connect('http://' + document.domain + ':' + location.port);
+                socket.on('peso', function(data) {
+                    valorPeso = data.peso;
+                    $("#pesoEntrada").val(data.peso); 
+                    $("#peso").text("Peso actual: " + data.peso + " kg");
+                    document.getElementById("numeroAleatorio").value = valorPeso; // el que recibe los datos y se muestran
+                    if (esNuevo){
+                    //$("#numeroAleatorio").val(data.peso);
+                    //let numeroAleatorio = document.getElementById("#numeroAleatorio")
+                    
+                        if (!botonPresionado) {
+                        
+                        document.getElementById('numeroTransferido').value = valorPeso;
+                        //$("#pesoSalida").val(numeroAleatorio); 
+                        }
+                    console.log('Datos: ' + data.peso);
+                    }
+                    if (editarRegistro){
+                        if (!botonPresionado2) {
+                            document.getElementById('pesoSalida').value = valorPeso;
+                        }                        
+                    }
+                });
+
+
+            });
+            
+            var botonPresionado = false;
+            var botonPresionado2 = false;
+        </script>
+    
+        <script>
+            // Función para detener la simulación
+            function detenerSimulacion() {
+                // Enviar una solicitud al servidor para detener la simulación
+                fetch('/stop')
+                    .then(response => response.text())
+                    .then(message => console.log(message))
+                    // .then(message => alert(message))
+                    .catch(error => console.error('Error al detener la simulación:', error));
+                
+                    $("#pesoEntrada").css("background-color", "#e0e0d1"); 
+            }
+        </script>
+    
+    <script>
+        // Función para detener la simulación
+        function iniciarSimulacion() {
+            // Enviar una solicitud al servidor para detener la simulación
+            fetch('/opens')
+                .then(response => response.text())
+                .then(message => console.log(message))
+                // .then(message => alert(message))
+                .catch(error => console.error('Error al detener la simulación:', error));
+        }
+    </script>    
+
+
+<!-- Obtener fecha y hora -->
+<script>
+    // Función para actualizar la fecha y la hora
+function actualizarFechaHora() {
+    // Obtén la fecha y hora actual
+    let fechaActual = new Date();
+
+    // Formatea la fecha en el formato deseado: DD-MM-YYYY
+    //let fechaFormateada = fechaActual.getDate().toString().padStart(2, '0') + '-' + (fechaActual.getMonth()+1).toString().padStart(2, '0') + '-' + fechaActual.getFullYear();
+
+    // Formatea la hora en el formato deseado: HH:MM:SS
+    //let horaFormateada = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0') + ':' + fechaActual.getSeconds().toString().padStart(2, '0');
+
+
+
+    // Formatea la fecha en el formato deseado: YYYY-MM-DD
+    let fechaFormateada = fechaActual.getFullYear() + '-' + (fechaActual.getMonth()+1).toString().padStart(2, '0') + '-' + fechaActual.getDate().toString().padStart(2, '0');
+
+    // Formatea la hora en el formato deseado: HH:MM:SS
+    let horaFormateada = fechaActual.getHours().toString().padStart(2, '0') + ':' + fechaActual.getMinutes().toString().padStart(2, '0') + ':' + fechaActual.getSeconds().toString().padStart(2, '0');
+
+
+
+    // Asigna la fecha y hora formateadas a los campos de salida
+    document.getElementById('fechaSalida').value = fechaFormateada;
+    document.getElementById('horaSalida').value = horaFormateada;
+}
+
+// Actualiza la fecha y la hora inmediatamente
+actualizarFechaHora();
+
+// Configura un intervalo para actualizar la hora cada segundo
+setInterval(actualizarFechaHora, 1000);
+
+</script>
+
+
+
+
+</body>
+</html>

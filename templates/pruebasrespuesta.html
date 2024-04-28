@@ -1,0 +1,26 @@
+<!-- https://www.youtube.com/watch?v=S3cS3obeg2Y -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="mypanel"></div>   
+<script>
+    // si la función que recupera el json se incluyen dentro de temporizador, 
+    //el resultado se mostrará sin necesidad de refrescar la página 
+    let myUrl = "http://127.0.0:5000/json";
+    $.getJSON(myUrl, function(data) {
+        let text = `Peso: ${data.Gross} kg<br>`;
+        $(".mypanel").html(text);
+    });
+</script>
+
+</body>
+</html>
+
+
+

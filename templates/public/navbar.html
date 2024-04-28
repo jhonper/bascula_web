@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link href="{{ url_for('static', filename='css/bootstrap-5.2.3.min.css') }}" rel="stylesheet" 
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script src="{{ url_for('static', filename='js/bootstrap-5.2.3.bundle.min.js') }}" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- <script src="{#url_for('static', filename='js/main.js')#}"></script> -->
+</head>
+
+<!-- <nav class="navbar bg-light"> -->
+    <nav class="navbar" style="background-color: #e3f2fd;" mt-0> 
+        <div class="container-fluid" mt-0>
+            <a href="{{ url_for('entransito') }}" class="navbar-brand" >
+                <!-- <img class="logo" src="{# url_for('static', filename ='assets/imgs/logo.png') #}"
+                    alt="Logo web developer Urian Viera"> -->
+                    <img class="logo" src="{{ url_for('static', filename='img/logo2.png') }}" 
+                    alt="Logo Ocean Service" > 
+            </a> 
+            <h3 style="color: #1C2B4A; margin-right: 500px;">Ocean Services & Trading</h3>
+        </div>
+    </nav>
+    
+    <!-- MENU OFICIAL -->
+    <nav class="menunav">
+      <ul>
+        <li><a href="{{ url_for('entransito') }}">Movimientos</a></li>
+        <li><a href="{{ url_for('addEntrada') }}">Nueva entrada</a></li>
+        <li><a href="#news">Editar entrada</a></li>
+        {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+        <li class="dropd">
+            <a href="javascript:void(0)" class="dropbut">Mantenimientos</a>
+            <div class="dropd-content">
+                <a href="{{ url_for('productos') }}">Productos</a>
+                <a href="{{ url_for('proveedores') }}">Proveedores</a>
+                <a href="{{ url_for('conductores') }}">Conductores</a>
+                <a href="{{ url_for('vehiculos') }}">Vehiculos</a>
+                <a href="{{ url_for('origenes') }}">Origenes</a>
+                <a href="{{ url_for('destinos') }}">Destinos</a>
+                <a href="{{ url_for('users') }}">Usuarios</a>
+            </div>
+        </li>
+        {% endif %}
+        {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+        <li class="dropd">
+            <a href="javascript:void(0)" class="dropbut">Reportes</a>
+            <div class="dropd-content">
+                <a href="{{ url_for('filtrosmultiples') }}">Excel</a>
+                <a href="{{ url_for('buscarentrada') }}">PDF</a>
+            </div>
+        </li>
+        {% endif %}
+        <li class="btnlogout" style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+    </nav>
+
+    <!-- ESTILOS OFICIALES -->
+    <style>
+      .menunav {
+        margin: 5px 120px 30px 120px;
+      }
+      ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          /* background-color: #E7E9EB; */
+          background: #F8F9FA;
+      }
+      
+      li {
+          float: left;
+          border: 1px solid #DEE2E6;
+          border-radius: 3px;
+          margin: 0 2px 0 2px;
+      }
+      
+      li a,
+      .dropbut {
+          display: inline-block;
+          /* color: rgb(119, 112, 112); */
+          /* color: #575A5E; */
+          /* color: #084298; */
+          /* color: #2163AC; */
+          color: #535353;
+          text-align: center;
+          padding: 12px 16px;
+          text-decoration: none;
+      }
+      
+      li a:hover,
+      .dropd:hover .dropbut {
+          background-color: #5daf60;
+          /* color: rgb(223, 226, 226); */
+          color: #535353;
+          transition: background-color 0.3s ease;
+      }
+      
+      li.dropd {
+          display: inline-block;
+      }
+      
+      .dropd-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+          /* transition: background-color 0.3s ease; */
+      }
+      
+      .dropd-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+      }
+      
+      .dropd-content a:hover {
+          background-color: #f1f1f1;
+      }
+      
+      .dropd:hover .dropd-content {
+          display: block;
+      }
+      .btnlogout a{
+        background: #6C757D;
+        color: #D2D2D2;
+        border-radius: 3px;
+        /* color: #4CAF50; */
+      }
+      .btnlogout a:hover{
+        background: #878c91;
+        color: #D2D2D2;
+        /* color: #4CAF50; */
+      }
+  </style>
+
+
+
+
+    <!-- para pruebas -->
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+      
+    </nav>
+
+    <!-- MENU ADICIONAL BOOTS -->
+    <nav>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Movimientos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Nueva entrada</a>
+        </li>
+      <a class="dropdown-item" href="#">Movimientos</a>
+      {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+      <div class="dropdown">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          Menúx
+        </button>
+      {% endif %}  
+        <div class="dropdown-content">
+          <a class="dropdown-item" href="#">Conductores</a>
+          <a class="dropdown-item" href="#">Vehículos</a>
+          {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+          <a class="dropdown-item" href="#">Usuarios</a>
+        </div>
+        {% endif %}  
+      </div>
+    </nav>
+
+    <!-- MENU ADICIONAL -->
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#news">News</a></li>
+      </ul>  
+      <button class="dropbut">Opciones</button>
+      <div class="dropdown">
+        <button class="dropbut">Movimientos</button>
+        
+        <button class="dropbut">Nueva entrada</button>
+        {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+        <button class="dropbut">Productos</button>
+        <button class="dropbut">Clientes</button>
+        <button class="dropbut">Conductores</button>
+      {% endif %}  
+        <div class="dropdown-content">
+          <a href="#">Conductores</a>
+          <a href="#">Vehículos</a>
+          {% if session['editarpesos'] != None and session['productospermitidos'] != None  %}
+          <a href="#">Usuarios</a>
+        </div>
+        {% endif %}  
+      </div>
+    </nav>
+
+    <!-- ORIGINAL -->
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <div class="d-flex" role="search" >
+              <a class="navbar-brand nava" style="border-radius: 1px solid black;" href="{{ url_for('entransito') }}">Movimientos</a>
+            <a class="navbar-brand nava" href="{{ url_for('addEntrada') }}">Nueva entrada</a>
+            {% if session['productospermitidos'] is not none %}
+              <a class="navbar-brand nava" href="{{ url_for('productos') }}">Productos</a>
+              <a class="navbar-brand nava" href="{{ url_for('proveedores') }}" title="Registrar nuevo Proveedor">Cliente</a>
+              <a class="navbar-brand nava" href="{{ url_for('conductores') }}">Conductores</a>
+              <a class="navbar-brand nava" href="{{ url_for('vehiculos') }}">Vehículos</a>
+              <a class="navbar-brand nava" href="{{ url_for('origenes') }}">Origenes</a>
+              <a class="navbar-brand nava" href="{{ url_for('destinos') }}">Destinos</a>
+              <a class="navbar-brand nava" href="{{ url_for('users') }}">Usuarios</a>
+            {% endif %}  
+          </ul>
+          
+          <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    
+          
+
+    
+ 
+    <!-- <style>
+      /* Estilo del botón del menú   ********************************************* */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 19px;
+  border: none;
+}
+
+/* Estilo del contenedor del menú desplegable */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Estilo del contenido del menú desplegable */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Estilo de los enlaces dentro del menú desplegable */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Cambiar el color de fondo de los enlaces cuando se pasa el mouse por encima */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Mostrar el menú desplegable cuando se pasa el mouse por encima */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+    </style> -->
+    
+    
+
+
+
+      <style>
+        /* Estilo para los enlaces del menú */
+        .nava{
+          border: 1px solid #D2D2D2; /* Bordes por defecto */
+          padding: 5px 10px; /* Espaciado interno */
+          margin-right: 10px; /* Espaciado externo */
+          border-radius: 5px; /* Borde redondeado */
+          text-decoration: none; /* Quitar subrayado del texto */
+        }
+      
+        /* Estilo para el color de fondo al presionar */
+        .nava.active {
+          background-color: lightblue; /* Cambiar el color de fondo */
+        }
+        
+      </style>
+
+      <!-- Script para agregar la funcionalidad de cambio de color al presionar -->
+<script>
+  // Seleccionar todos los elementos de clase "navbar-brand"
+  var navItems = document.querySelectorAll('.navbar-brand');
+
+  // Iterar sobre cada elemento
+  navItems.forEach(function(item) {
+    // Agregar un evento de clic
+    item.addEventListener('click', function() {
+      // Eliminar la clase "active" de todos los elementos
+      navItems.forEach(function(navItem) {
+        navItem.classList.remove('active');
+      });
+      // Agregar la clase "active" solo al elemento clickeado
+      item.classList.add('active');
+    });
+  });
+</script>
+      
+
+    <!-- <nav class="navbar navbar-expand-lg bg-light" style="margin-left: 10px; margin-bottom: 5px;">
+        <div class="container-fluid d-flex">
+          <a class="navbar-brand" href="{{ url_for('entransito') }}">Movimientos</a>
+          <a class="navbar-brand" href="{{ url_for('addEntrada') }}">Nueva entrada</a>
+          {% if session['productospermitidos'] is not none %}
+            <a class="navbar-brand" href="{{ url_for('productos') }}">Productos</a>
+            <a class="navbar-brand" href="{{ url_for('proveedores') }}" title="Registrar nuevo Proveedor">Proveedor</a>
+            <a class="navbar-brand" href="{{ url_for('conductores') }}">Conductores</a>
+            <a class="navbar-brand" href="{{ url_for('vehiculos') }}">Vehículos</a>
+            <a class="navbar-brand" href="{{ url_for('origenes') }}">Origenes</a>
+            <a class="navbar-brand" href="{{ url_for('destinos') }}">Destinos</a>
+            <a class="navbar-brand" href="{{ url_for('users') }}">Usuarios</a>
+          {% endif %}  
+          <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">    
+        </div>  
+        </div>
+    </nav> -->
+    
+    <!-- <a class="navbar-brand" href="#">Movimientos</a>
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler"productos des deutton" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+    
+    
+    <!-- <nav class="navbar navbar-dark bg-dark">
+    </nav>
+      
+    <nav class="navbar navbar-dark bg-primary">
+    </nav>
+      
+    <nav class="navbar" style="background-color: #e3f2fd;">
+    </nav> -->
+    
+    <!-- alt="Logo Ocean Service" width="140" height="80">  -->

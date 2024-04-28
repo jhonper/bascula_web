@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container" style="display: flex; justify-content: center;">    
+    <table id="table-datos" style="margin: auto; border-collapse: collapse; margin-top: 20px; font-family: 'Courier New', monospace; border-top: 2px dashed black;">
+        <tr style="text-align: center; margin-top: 10px;">
+            <td colspan="5" style="border: 1px ;">OCEAN SERVICES & TRADING SAS</td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="5" style="border: 1px ">&nbsp;NIT : 901.028.949-4</td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="5" style="border: 1px ">&nbsp;TELEFONO: 2181236</td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="5" style="border: 1px ">&nbsp;DIRECCION: CRA 11 # 86-32</td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="5" style="border: 1px ">&nbsp;BOGOTA-COLOMBIA</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="border-bottom: 2px dashed black">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="border: 1px ">&nbsp;</td>
+        </tr>
+
+        
+        <tr >
+          <td style="border: 1px "></td>
+          <td style="border: 1px ">&nbsp;&nbsp;FECHA</td>
+          <td style="border: 1px ">&nbsp;HORA</td>
+          <td style="border: 1px ">&nbsp;PESO</td>
+          <td style="border: 1px ">&nbsp;&nbsp;&nbsp;PESO NETO</td>
+        </tr>
+
+        <tr>
+          <td style="border: 1px ">ENTRADA:</td>
+          <td style="border: 1px ">:&nbsp;{{ dataMovimiento.fechaentrada }}</td>
+          <td style="border: 1px ">&nbsp;{{ dataMovimiento.horaentrada }}</td>
+          <td style="border: 1px ">&nbsp;{{ dataMovimiento.pesoentrada }}</td>
+          <td style="border: 1px ">&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">SALIDA</td>
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.fechasalida }}</td>
+            <td style="border: 1px ">&nbsp;{{ dataMovimiento.horasalida }}</td>
+            <td style="border: 1px ">&nbsp;{{ dataMovimiento.pesosalida }}</td>
+            <td style="border: 1px ">&nbsp;&nbsp;&nbsp;{{ dataMovimiento.pesoneto }} Kilogramos</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="border: 1px ">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">PROVEEDOR</td>
+            <!-- <td colspan="2" style="border: 1px ">:&nbsp;OC-EV-JR</td> -->
+            <td colspan="2" style="border: 1px ">:&nbsp;{{ dataMovimiento.nombreproveedor }}</td>
+            <td style="border: 1px ">&nbsp;&nbsp;&nbsp;CODIGO</td> 
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.documentoproveedor }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">PRODUCTO:</td>
+            <td colspan="2" style="border: 1px ">:&nbsp;{{ dataMovimiento.nombreproducto }}</td>
+            <td style="border: 1px ">&nbsp;&nbsp;&nbsp;CODIGO</td>
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.codigoproducto }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">CONDUCTOR:</td>
+            <td colspan="2" style="border: 1px ">:&nbsp;{{ dataMovimiento.nombreconductor }}</td>
+            <td style="border: 1px ">&nbsp;&nbsp;&nbsp;PLACA</td>
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.placa }}</td>
+        </tr>
+       
+        <tr>
+            <td style="border: 1px ">ORIGEN</td>
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.origen }}</td>
+            <td style="border: 1px "></td>
+            <td style="border: 1px ">&nbsp;&nbsp;&nbsp;DESTINO</td>
+            <td style="border: 1px ">:&nbsp;{{ dataMovimiento.destino }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">NRO. DOCUMENTO</td>
+            <td style="border: 1px ">:&nbsp;1</td>
+            <td style="border: 1px "></td>
+            <td style="border: 1px "></td>
+            <td style="border: 1px "></td>
+        </tr>
+        <tr>
+            <td style="border: 1px ">OBSERVACIONES</td>
+            <td colspan="5" style="border: 1px ">:&nbsp;{{ dataMovimiento.observaciones }}</td>
+            <td style="border: 1px "></td>
+            <td style="border: 1px "></td>
+            <td style="border: 1px "></td>
+        </tr>
+        <tr style="border-bottom: 1px solid black;">
+            <td></td>
+        </tr >
+        <tr style="border-left: 1px solid white; border-right: 1px solid white">
+            <td></td>
+        </tr>
+        <tr style="border-left: 1px solid white; border-right: 1px solid white">
+            <td style="padding-left: 150px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px">&nbsp;</td>
+        </tr>
+        <tr style="border-left: 1px solid white; border-right: 1px solid white">
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px "></td>
+            <td style="padding-left: 30px; border-bottom: 1px solid black">&nbsp;</td>
+            <!-- <td style="padding-left: 10px; border: 1px solid red">PESADO POR</td> -->
+        </tr>
+        <tr style="border-left: 1px solid white; border-right: 1px solid white; border-bottom: 1px solid white">
+            <td style="padding-left: 20px; border-top: 1px solid black">PESADO POR</td>
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 10px; border: 1px"></td>
+            <td style="padding-left: 30px; border: 1px">RECIBIDO POR</td>
+            <!-- <td style="padding-left: 10px; border: 1px solid red">PESADO POR</td> -->
+        </tr>
+        
+            <!-- <tr>
+                <td colspan="6"><h1>No hay vehículos en tránsito</h1></td>
+            </tr> -->
+        
+
+      </table>
+      
+      
+    </div>
+    <div class="boton" style="display: flex; justify-content: center; margin-top: 40px;">
+        <button id="tabla-datos">Generate PDF</button>
+    </div>
+      
+
+      <!-- <script src="./static/html2pdf.bundle.min.js.descarga"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="../static/js/html2pdf.bundle.min.js"></script>
+
+      <script>
+        document.getElementById('tabla-datos').addEventListener('click', function() {
+        //const element = document.body; // Element to convert to PDF
+        const element = document.getElementById('table-datos');
+    
+      html2pdf()
+        .from(element)
+        .save('document.pdf'); // Save PDF with filename 'document.pdf'
+    });
+    
+      </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+  integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+  {% include './public/navbar.html' %}    
+
+  <script>
+    let username = "{{ session['username'] }}"; 
+    let editarpesos = "{{ session['editarpesos'] }}"; 
+    let productospermitidos = "{{ session['productospermitidos'] }}"; 
+
+    console.log(username, editarpesos, productospermitidos);
+  </script>
+
+<div class="container">
+  <h4 class="mb-0">Vehículos en tránsito</h4>
+  <div class="card shadow">
+    <div class="card-body">
+      <!-- <form action="/editMovimiento" method="POST" class="mt-5"> -->
+      <form action="/editMovimiento" method="POST" class="mt-1">  
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Entrada</th>
+            <th>Fecha Entrada</th>
+            <th>Hora Entrada</th>
+            <th>Placa</th>
+            <th>Proveedor</th>
+            <th>Operaciones</th> 
+          </tr>
+        </thead>
+        <tbody>
+          {% if dataMovimientos %}  
+            {% for movimiento in dataMovimientos %}
+            <tr>
+              <td>{{ movimiento.idmovimiento }}</td>
+              <td>{{ movimiento.fechaentrada }}</td>
+              <td>{{ movimiento.horaentrada }}</td>
+              <td>{{ movimiento.placa }}</td>
+              <td>{{ movimiento.proveedor }}</td>
+              <td>
+              <button type="submit" name="idmovimiento" value="{{ movimiento.idmovimiento }}" class="btn btn-success">Cerrar entrada</button>
+
+            </td>
+          </tr>
+          {% endfor %}
+          
+      {% else %} 
+          <tr>
+            <td colspan="6"><h1>No hay vehículos en tránsito</h1></td>
+          </tr>
+      {% endif %}    
+        </tbody>
+      </table>
+    </form>
+      </div>
+  </div>
+</div> 
+
+<style>
+  /* Establece el ancho de la columna Proveedor */
+  th:nth-child(5) {
+    width: 200px;
+  }
+  
+  /* Establece el ancho de la columna Operaciones */
+  th:nth-child(6) {
+    width: 150px;
+  }
+  </style>
+
+<!-- Bootstrap JS (opcional si no necesitas funcionalidades JS de Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

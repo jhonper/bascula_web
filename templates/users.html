@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- <script src="{#url_for('static', filename='js/main.js')#}"></script> -->
+</head>
+<body>
+    {% include './public/navbar.html' %}   
+    <!-- <h1 class="text-center mt-5 mb-5 text-primary">titulo</h1> -->
+
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <form action="/adduser" method="POST">
+                    <div class="row mb-0">
+                        <div class="col">
+                            <label>Id</label>
+                            <input type="text" class="form-control mb-3" name="id">
+                        </div>
+                        <div class="col">
+                            <label>Username</label>
+                            <input type="text" class="form-control mb-3" name="username">
+                        </div>
+                        <div class="col">
+                            <label>Contraseña</label>
+                            <input type="text" class="form-control mb-3" name="password">
+                        </div>
+                        <div class="col" >
+                            <button class="btn btn-primary mb-3 mt-4 btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#insertModal">
+                                Nuevo usuario
+                            </button>
+                            </div> 
+                        </div>
+                    </div>
+                </form>
+
+
+                <!-- Modal para insertar datos -->
+                <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="insertModalLabel">Agregar usuario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="insertForm" action="/adduser" method="POST">
+                                    <!-- <div class="row mb-3"> -->
+                                        <select class="form-select mb-3" aria-label="Default select example" id="role" name="descripcion" onchange="mostrarCodeproveedor()">
+                                            <option selected>Seleccione un tipo de usuario</option>
+                                            <option value="Administrador">Administrador</option>
+                                            <option value="Operario">Operario</option>
+                                            <option value="Proveedor">Cliente</option>
+                                        </select>
+
+                                        <div class="col">
+                                            <label>Usuario</label>
+                                            <input type="text" class="form-control mb-3" name="username">
+                                        </div>
+                                        <div class="col">
+                                            <label>Contraseña</label>
+                                            <input type="password" class="form-control mb-3" id="password1" name="password">
+                                        </div>
+                                        <div class="col">
+                                            <label>Repetir contraseña</label>
+                                            <input type="password" class="form-control mb-3" id="password2">
+                                        </div>
+                                        <div class="col mb-4 mt-4" id="divpermiteeditarpesos">
+                                            <input type="checkbox" class="form-check-input" id="permiteeditarpesos" name="permiteeditarpesos">
+                                            <label for="permiteeditarpesos">Permite editar pesos manuales</label>
+                                        </div>
+                                        <div class="col mb-3" id="divproductospermitidos">
+                                            <label>Productos que puede modificar</label>
+                                            <input type="text" class="form-control mb-3" id="productospermitidos" name="productospermitidos">
+                                        </div>
+                                        <div class="col">
+                                            <label>Descripción</label>
+                                            <input type="text" class="form-control mb-3" name="">
+                                        </div>
+                                        <!-- <div class="col" style="display: none;">
+                                            <label>Cód Proveedor</label>
+                                            <input type="text" class="form-control mb-3" name="codigoprov">
+                                        </div> -->
+                                        <div id="providerCode" class="col mb-3" style="display: none;">
+                                            <label>Código Proveedor</label>
+                                            <input type="text" class="form-control mb-3" name="codigoprov">
+                                        </div>
+                                    <!-- </div> -->
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" form="insertForm" class="btn btn-primary" onclick="checkPassword()">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- fin modal insertar -->
+                <script>
+                    function mostrarCodeproveedor() {
+                        var selectBox = document.getElementById("role");
+                        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+                        // if (selectedValue === "Proveedor") {
+                            if (selectedValue != "Proveedor") {    
+                            //document.getElementById("providerCode").style.display = "block";
+                            document.getElementById("providerCode").style.display = "none";
+                            document.getElementById("divpermiteeditarpesos").style.display = "block";
+                            document.getElementById("divproductospermitidos").style.display = "block";
+                        } else {
+                            // document.getElementById("providerCode").style.display = "none";
+                            document.getElementById("providerCode").style.display = "block";
+                            document.getElementById("divpermiteeditarpesos").style.display = "none";
+                            document.getElementById("divproductospermitidos").style.display = "none";
+                        }
+                    }
+                </script>
+
+                <script>
+                    document.getElementById('productospermitidos').addEventListener('input', function(event) {
+                        const inputValue = event.target.value;
+                        const regex = /^[0-9,]*$/;
+                        //const regex = /^[0-9,0-9]*$/;
+                    
+                        if (!regex.test(inputValue)) {
+                            // Verificar si el último carácter es un número
+                            const ultimoCaracter = inputValue.slice(-1);
+                                if (isNaN(ultimoCaracter) || ultimoCaracter == ',') {
+                                    event.target.value = inputValue.slice(0, -1); // Eliminar el último carácter ingresado
+                                }
+                            }
+                    });
+                </script>
+
+
+<script>
+    function checkPassword() {
+    var password1 = document.getElementById('password1').value;
+    var password2 = document.getElementById('password2').value;
+
+    if (password1 != password2) {
+        alert('Las contraseñas no coinciden');
+        return;
+    } //else {
+    //     // Aquí puedes poner el código para enviar el formulario
+    // }
+}
+</script>
+                
+
+                <!-- Tabla -->
+
+                <table class="table table-bordered">
+                    <thead>
+                        <!-- <th scope="col">#</th> -->
+                        <th scope="col">Id Usuario</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Cód Proveedor</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                    </thead>
+                
+                <tbody>
+                    {% for d in data %}
+                        <!-- <td></td> -->
+                        <tr>
+                            <td>{{d.id}}</td> <!-- id, codigo, origen -->
+                            <td>{{d.username}}</td>
+                            <!-- <td>{# d.password #}</td> -->
+                            <td>{{d.descripcion}}</td>
+                            <td>{{d.codigoprov}}</td>
+                            <td><button type="button" class="btn btn-primary btn-sm" id="btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}">Editar</button></td>
+                            <td><a href="{{url_for('deleteorigen', id=d.id)}}" class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{d.id}}">Eliminar</a></td>
+                        </tr>
+
+                        <!-- Modal de confirmación de eliminación -->
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Está seguro de que desea eliminar este registro?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Captura el clic en el botón de eliminación
+                            var deleteBtns = document.querySelectorAll('.delete-btn');
+                            deleteBtns.forEach(function(btn) {
+                                btn.addEventListener('click', function() {
+                                    var id = this.getAttribute('data-id');
+                                    var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                                    // Actualiza el enlace del botón "Eliminar" dentro del modal con la URL correcta para eliminar el registro
+                                    confirmDeleteBtn.setAttribute('href', '/deleteorigen/' + id);
+                                });
+                            });
+                        </script>
+
+
+                        <!-- modal -->
+                        <div class="modal fade" id="modal{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">{{d.username}}</h1> <!-- id, codigo, origen -->
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <form action="/edituser/{{d.id}}" method="POST">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control mb-3" name="username" value="{{d.username}}">
+
+                                    <label>Descripción</label>
+                                    <input type="text" class="form-control mb-3" name="descripcion" value="{{d.descripcion}}">
+
+                                    <label>Cód Proveedor</label>
+                                    <input type="text" class="form-control mb-3" name="codigoprov" value="{{d.codigoprov}}">
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                  <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% for page_num in range(1, num_pages + 1) %}
+                        <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Báscula Simulada</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+   
+    <br>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <form class="mt-5">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Proveedor</label>
+                            <input type="text" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial">Código proveedor</label>
+                        <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Producto</label>
+                            <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial" style="font-size: 13px;" >Código producto</label>
+                        <input type="email" class="form-control" id="" style="font-size: 9px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Conductor</label>
+                            <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial">Placa</label>
+                        <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Origen</label>
+                            <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial">Destino</label>
+                        <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Fecha entrada</label>
+                            <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial">Hora entrada</label>
+                        <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nombreMaterial">Fecha salida</label>
+                            <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                        <div class="form-group col-md-4">
+                        <label for="nombreMaterial">Hora salida</label>
+                        <input type="email" class="form-control" id="" style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                   
+
+                    <div class="form-row">
+                       
+                        <script>
+                            function mostrarNombre() {
+                            var idProducto = document.getElementById("selMaterial").value;
+                            var nombreMaterial = document.getElementById("txtNombreMaterial");
+                            
+                            // Búsqueda del nombre del material a partir del ID
+                            // En este ejemplo se supone que la variable "data" contiene la información de la base de datos
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].IDproducto === idProducto) {
+                                nombreMaterial.value = data[i].Nombre;
+                                console.log(nombreMaterial.value);
+                                break;
+                                }
+                            }
+                            }
+                            </script>
+                        
+                        
+                    </div>
+
+                    <div class="form-row"> <!-- pesos -->
+                    
+                        
+                        
+
+                        <div class="form-group col-md-3">
+                            <label for="inputZip">Peso entradas</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" required id="numeroTransferido" class="form-control" aria-label="Peso de entrada" aria-describedby="button-addon2" style="font-size: 38px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="btnPesoEntrada" style="height: 100%;" onclick="capturarPesoEntrada()" disabled="disabled">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="form-group col-md-3">
+                            <label for="inputZip">Peso salidas</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" id="pesoSalida" class="form-control" aria-label="Peso de entrada" aria-describedby="button-addon2" style="font-size: 38px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="btnPesoSalida" style="height: 100%;" onclick="capturarPesoSalida()" disabled="disabled"> <!-- onclick="deshabilitarBoton()" -->
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="form-group col-md-3">
+                            <label for="inputZip">Peso netos</label>
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="text" id="txtPesoNeto" class="form-control" aria-label="Peso neto" aria-describedby="button-addon2" style="font-size: 38px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="transferirNumero" style="height: 100%;" disabled="disabled">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                        
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>      
+        <!-- Botones de acciones  -->
+        
+        <button class="btn btn-primary" id="btnNuevo" onclick="nuevoRegistro()">Nuevo</button>
+        <button class="btn btn-primary" id="btnEditar" onclick="actualizarRegistro()" disabled="disabled">Editar</button>
+        <button class="btn btn-danger" id="btnCancelar">Cancelar</button>
+
+        </div>
+
+    <div class="form-row"> <!-- pesos -->
+            
+        <div class="form-group col-md-2">
+            <label for="numeroAleatorio">origen</label>
+        
+            <input type="text" id="numeroAleatorio" readonly>
+            <button id="transferirNumero">Transferir Número</button>
+            <input type="text" id="numeroTransferido" readonly>
+        </div> 
+    </div>  
+
+    <script>
+        // Función para transferir el número aleatorio al segundo input
+        function transferirNumero() {
+            var numeroAleatorio = document.getElementById('numeroAleatorio').value;
+            document.getElementById('numeroTransferido').value = numeroAleatorio;
+        }
+
+        // Ejecuta la función transferirNumero cuando se haga clic en el botón
+    </script>
+
+<script>
+    function transferirSalida() {
+        let pesoSalida = document.getElementById('numeroAleatorio').value;
+        document.getElementById('numeroTransferido').value = pesoSalida;
+    }
+
+    // Ejecuta la función transferirNumero cuando se haga clic en el botón
+</script>
+
+<script>
+    function transferirEntrada() {
+        let pesoSalida = document.getElementById('numeroAleatorio').value;
+        document.getElementById('numeroTransferido').value = pesoSalida;
+    }
+
+    // Ejecuta la función transferirNumero cuando se haga clic en el botón
+    document.getElementById('btnEntrada').addEventListener('click', transferirEntrada);
+</script>
+
+<script>
+    function deshabilitarBoton() {
+        let btnPesoSalida = document.getElementById("btnPesoSalida");
+        btnPesoSalida.classList.remove("btn-primary");
+        btnPesoSalida.classList.add("btn-secondary");
+        btnPesoSalida.disabled = true;
+        botonPresionado = true;
+    }
+
+    function capturarPesoEntrada() {
+        let btnPesoEntrada = document.getElementById("btnPesoEntrada");
+
+        btnPesoEntrada.classList.remove("btn-primary");
+        btnPesoEntrada.classList.add("btn-secondary");
+        btnPesoEntrada.disabled = true;
+        botonPresionado = true;
+        document.getElementById("btnEditar").disabled = false;
+    }
+
+    //document.getElementById('btnPesoSalida').addEventListener('click', deshabilitarBoton); // desencadena 
+
+    function capturarPesoSalida() {
+        let btnPesoSalida = document.getElementById("btnPesoSalida");
+
+        btnPesoSalida.classList.remove("btn-primary");
+        btnPesoSalida.classList.add("btn-secondary");
+        btnPesoSalida.disabled = true;
+        editarRegistro = true;
+        botonPresionado2 = true;
+
+        let txtPesoEntrada = document.getElementById("numeroTransferido").value;
+        let txtPesoSalida = document.getElementById("pesoSalida").value;
+        console.log(`txtPesoEntrada: ${txtPesoEntrada}`);
+        console.log(`txtPesoSalida: ${txtPesoSalida}`);
+        let pesoNeto = txtPesoEntrada + txtPesoSalida;
+        console.log(`pesoNeto: ${pesoNeto}`);
+        document.getElementById("txtPesoNeto").value = parseInt(txtPesoEntrada) - parseInt(txtPesoSalida);
+    }
+    var btnPesoSalidaPresionado = false;
+
+    //document.getElementById('btnPesoSalida').addEventListener('click', capturarPesoSalida);
+    </script>
+
+    <script>
+        function nuevoRegistro() {
+            esNuevo = true;
+            document.getElementById("btnPesoEntrada").disabled = false;
+            document.getElementById("btnNuevo").disabled = true;
+        }
+
+        function actualizarRegistro() {
+            editarRegistro = true;
+            document.getElementById("btnPesoSalida").disabled = false;
+            document.getElementById("btnEditar").disabled = true;
+        }
+
+        document.getElementById('btnNuevo').addEventListener('click', nuevoRegistro);
+        document.getElementById('btnPesoSalida').addEventListener('click', actualizarRegistro);
+        //document.getElementById('btnEditar').addEventListener('click', actualizarRegistro);
+    </script>
+    
+
+        <script>
+            var esNuevo = false;
+            var editarRegistro = false;
+            $(document).ready(function(){
+                var socket = io.connect('http://' + document.domain + ':' + location.port);
+                socket.on('peso', function(data) {
+                    valorPeso = data.peso;
+                    $("#pesoEntrada").val(data.peso); 
+                    $("#peso").text("Peso actual: " + data.peso + " kg");
+                    document.getElementById("numeroAleatorio").value = valorPeso; // el que recibe los datos y se muestran
+                    if (esNuevo){
+                    //$("#numeroAleatorio").val(data.peso);
+                    //let numeroAleatorio = document.getElementById("#numeroAleatorio")
+                    
+                        if (!botonPresionado) {
+                        
+                        document.getElementById('numeroTransferido').value = valorPeso;
+                        //$("#pesoSalida").val(numeroAleatorio); 
+                        }
+                    console.log('Datos: ' + data.peso);
+                    }
+                    if (editarRegistro){
+                        if (!botonPresionado2) {
+                            document.getElementById('pesoSalida').value = valorPeso;
+                        }                        
+                    }
+                });
+
+    
+               
+            });
+
+
+
+            var botonPresionado = false;
+            var botonPresionado2 = false;
+        </script>
+    
+        <script>
+            // Función para detener la simulación
+            function detenerSimulacion() {
+                // Enviar una solicitud al servidor para detener la simulación
+                fetch('/stop')
+                    .then(response => response.text())
+                    .then(message => console.log(message))
+                    // .then(message => alert(message))
+                    .catch(error => console.error('Error al detener la simulación:', error));
+                
+                    $("#pesoEntrada").css("background-color", "#e0e0d1"); 
+            }
+        </script>
+    
+    <script>
+        // Función para detener la simulación
+        function iniciarSimulacion() {
+            // Enviar una solicitud al servidor para detener la simulación
+            fetch('/opens')
+                .then(response => response.text())
+                .then(message => console.log(message))
+                // .then(message => alert(message))
+                .catch(error => console.error('Error al detener la simulación:', error));
+        }
+    </script>    
+
+    <!-- Agrega el enlace a Bootstrap JS (opcional) -->
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+    ></script>
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"
+    ></script>    
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+</body>
+</html>
